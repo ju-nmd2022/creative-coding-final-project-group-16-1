@@ -45,3 +45,7 @@ canvas {
   background-color: #76c7c0;
   border-radius: 10px;
 }
+
+#warningPopup {
+  display: none;
+}

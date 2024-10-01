@@ -1,4 +1,7 @@
-// import { emotionbarLevel } from "./emotionbar.js"
+// import { emotionbarLevel } from "./emotionbar.js";
+import { response } from "./mood.js";
+// import { createArt } from "./art.js";
+
 
 const video = document.getElementById('video');
 
@@ -29,23 +32,23 @@ video.addEventListener('play', () => {
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-    
     faceapi.draw.drawDetections(canvas, resizedDetections);
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
-             
-                const faceCount = detections.length;
-
-              
-                if (faceCount > 1) {
-
-                    warningPopup.style.display = 'block';
-                    confirm ("one face each time!")
-                } else {
-
-                    warningPopup.style.display = 'none';
-                    
-                }
+    if (detections.length > 0) {
+      const emotions = detections[0].expressions;  
+      // emotionbarLevel(emotions);
+      response(emotions);  
+    }
+    
+    // only detect one person
+    const faceCount = detections.length;
+      if (faceCount > 1) {
+        warningPopup.style.display = 'block';
+        confirm ("One face each time!")
+      } else {
+        warningPopup.style.display = 'none';
+      }
   }, 400)
 })

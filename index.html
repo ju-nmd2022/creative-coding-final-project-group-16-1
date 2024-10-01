@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotion Detection</title>
 <script defer src="face-api.min.js"></script>
-<script defer src="codes/script.js"></script>
+<script defer type="module" src="codes/script.js"></script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,6 +14,6 @@
     <p id="emo-text">Emotion Level</p>
     <progress id="emo-bar" value="50" max="100"></progress>
 </div>
-<div id="warningPopup" style="display:none;"></div>
+<div id="warningPopup"></div>
 </body>
 </html>
