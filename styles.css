@@ -6,8 +6,42 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f0f0f0;
 }
 
 canvas {
   position: absolute;
+}
+
+#emotion-container {
+  position: fixed;
+  bottom: 25px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#emo-text {
+  font-family: fantasy;
+  font-size: 20pt;
+}
+
+#emo-bar {
+  width: 50%;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #ccc;
+  appearance: none;
+}
+
+#emo-bar::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+#emo-bar::-webkit-progress-value {
+  background-color: #76c7c0;
+  border-radius: 10px;
 }
