@@ -6,8 +6,8 @@ export function emotionbarLevel(emotions) {
   const negativeEmotion = emotions.sad + emotions.angry + emotions.disgusted;
 
   if (positiveEmotion > negativeEmotion) {
-    emotionBar.value = Math.min(100, emotionBar.value + 1); // increases if positive
+    emotionBar.value = Math.min(100, emotionBar.value + 10); // increases if positive
   } else {
-    emotionBar.value = Math.max(0, emotionBar.value - 1); // decreases if negative
+    emotionBar.value = Math.max(0, emotionBar.value - 10); // decreases if negative
   }
 }
