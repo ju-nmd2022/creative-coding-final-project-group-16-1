@@ -34,6 +34,18 @@ video.addEventListener('play', () => {
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
-    
+             
+                const faceCount = detections.length;
+
+              
+                if (faceCount > 1) {
+
+                    warningPopup.style.display = 'block';
+                    confirm ("one face each time!")
+                } else {
+
+                    warningPopup.style.display = 'none';
+                    
+                }
   }, 400)
 })
