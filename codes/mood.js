@@ -1,7 +1,7 @@
-// system's mood
+
 function getMood() {
-  const currentHour = new Date().getHours(); // real time
-  
+  const currentHour = new Date().getHours(); 
+
   if (currentHour >= 6 && currentHour < 9) {
     return "tired";
   } else if (currentHour >= 12 && currentHour < 17) {
@@ -13,7 +13,7 @@ function getMood() {
   }
 }
 
-//the randomness
+
 function randomChance() {
   const chance = Math.floor(Math.random() * 10) + 1; 
 
@@ -26,13 +26,13 @@ function randomChance() {
   }
 }
 
-//responses
+
 export function response(emotions) {
-  const currentMood = getMood(); //moods
-  const currentChance = randomChance(); //chances
+  const currentMood = getMood();
+  const currentChance = randomChance();
   let responseMessage = "";  
 
-  // Moods based on random chances
+ 
   if (currentChance === "positive") {
     if (currentMood === "tired") {
       responseMessage += "Aaahnm... Good morning! How are you?";
@@ -67,7 +67,7 @@ export function response(emotions) {
     }
   }
 
-  //responses based on emotions
+
   if (emotions.happy > 0.5) {
     responseMessage += " You seem happy though, that's awesome!";
   } else if (emotions.sad > 0.5) {
@@ -78,6 +78,11 @@ export function response(emotions) {
     responseMessage += " Hmm, you seem disgusted. Let's shift that mood!";
   }
 
-  confirm(responseMessage);  
+  
+  if (!window.popupShown) {
+    alert(responseMessage); 
+    window.popupShown = true; 
+  }
+  
   return responseMessage; 
 }
