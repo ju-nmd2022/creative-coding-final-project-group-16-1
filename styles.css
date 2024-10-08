@@ -49,3 +49,28 @@ canvas {
 #warningPopup {
   display: none;
 }
+
+/* 样式定义表情雨的表情 */
+.emoji {
+    position: absolute;
+    font-size: 40px;
+    animation: fall linear 5s forwards;
+}
+
+/* 定义表情雨的动画 */
+@keyframes fall {
+    from {
+        top: -50px;
+        opacity: 1;
+    }
+    to {
+        top: 100vh;
+        opacity: 0.5;
+    }
+}
+
+/* 页面基础样式（可选） */
+body {
+    margin: 0;
+    overflow: hidden;
+}
