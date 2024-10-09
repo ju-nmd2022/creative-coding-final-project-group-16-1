@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotion Detection</title>
+    <title>Emotion Detection System</title>
+    <link rel="stylesheet" href="style.css">
     <script defer src="face-api.min.js"></script>
-    <script defer type="module" src="art.js"></script>
     <script defer src="story.js"></script>
-
-    <link rel="stylesheet" href="styles.css"> 
- 
 </head>
 <body>
-    <video id="video" width="720" height="560" autoplay muted></video>
-    
-    <div id="emotion-container">
+    <div id="container">
+
+        <div id="video-section">
+            <video id="video" width="720" height="560" autoplay muted></video>
+        </div>
+
+
+        <div id="story-section">
+            <div id="storyContainer">
+                <h2>Generated Story</h2>
+                <p id="storyText">Your unique story will appear here...</p>
+            </div>
+            
+
+            <div id="refresh-container">
+                <button id="refresh-button">Klick Me for New Story!</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="emotion-bar-container">
         <p id="emo-text">Emotion Level</p>
         <progress id="emo-bar" value="50" max="100"></progress>
     </div>
-
 </body>
 </html>
-
-<div id="emotion-container">
-    <p>Emotion Level</p>
-    <progress id="emo-bar" value="50" max="100"></progress>
-</div>
-<div id="storyContainer">
-    <p id="storyText">Your unique story will appear here...</p>
-</div>
-
-    <div id="warningPopup"></div>
-
-    <div id="emojiContainer"></div>
