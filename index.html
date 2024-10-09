@@ -5,14 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotion Detection</title>
     <script defer src="face-api.min.js"></script>
-    <script defer type="module" src="codes/script.js"></script>
+    <script defer type="module" src="art.js"></script>
+    <script defer src="story.js"></script>
+
     <link rel="stylesheet" href="styles.css"> 
+ 
 </head>
 <body>
     <video id="video" width="720" height="560" autoplay muted></video>
+    
     <div id="emotion-container">
         <p id="emo-text">Emotion Level</p>
         <progress id="emo-bar" value="50" max="100"></progress>
     </div>
+
+</body>
+</html>
+
+<div id="emotion-container">
+    <p>Emotion Level</p>
+    <progress id="emo-bar" value="50" max="100"></progress>
+</div>
+<div id="storyContainer">
+    <p id="storyText">Your unique story will appear here...</p>
+</div>
+
     <div id="warningPopup"></div>
+
     <div id="emojiContainer"></div>

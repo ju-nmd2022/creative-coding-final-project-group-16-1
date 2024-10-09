@@ -1,63 +1,54 @@
+/* 基础样式 */
 body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-canvas {
-  position: absolute;
+/* 容器样式：左视频右故事布局 */
+#container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
 }
 
-#emotion-container {
-  position: fixed;
-  bottom: 25px;
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+/* 视频窗口样式 */
+#video-section {
+    flex: 1;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ddd;
+    background-color: #000;
 }
 
-#emo-text {
-  font-family: fantasy;
-  font-size: 20pt;
+/* 故事生成区域样式 */
+#story-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#emo-bar {
-  width: 50%;
-  height: 20px;
-  border-radius: 10px;
-  background-color: #ccc;
-  appearance: none;
+#storyContainer {
+    padding: 10px;
+    border: 1px solid #ddd;
 }
 
-#emo-bar::-webkit-progress-bar {
-  background-color: #e0e0e0;
-  border-radius: 10px;
+h2 {
+    text-align: center;
+    color: #333;
 }
 
-#emo-bar::-webkit-progress-value {
-  background-color: #76c7c0;
-  border-radius: 10px;
+#storyText {
+    font-size: 16px;
+    color: #666;
 }
 
-#warningPopup {
-  display: none;
-}
 
-/* 样式定义表情雨的表情 */
-.emoji {
-    position: absolute;
-    font-size: 40px;
-    animation: fall linear 5s forwards;
-}
-
-/* 定义表情雨的动画 */
 @keyframes fall {
     from {
         top: -50px;
@@ -69,8 +60,3 @@ canvas {
     }
 }
 
-/* 页面基础样式（可选） */
-body {
-    margin: 0;
-    overflow: hidden;
-}
