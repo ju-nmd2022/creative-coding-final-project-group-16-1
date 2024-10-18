@@ -83,6 +83,8 @@ function generateRandomStory(emotions) {
         const storyText = document.getElementById('storyText');
         const story = generateStoryBasedOnEmotion(currentEmotion);
         storyText.innerText = story;
+
+        createSound(currentEmotion);
     }
 }
 
@@ -199,6 +201,39 @@ function generateStoryBasedOnEmotion(emotion) {
 
     return `${storyStart} ${storyMiddle} ${storyEnd}`;
 }
+
+function createSound(emotion) {
+    let melody = [];
+    let duration = [];
+
+    const synth = new Tone.Synth().toDestination();
+
+    if (emotion === "happy") {
+        melody = ["C4", "E4", "G4", "C5"];
+        duration = ["4n", "4n", "4n", "4n"];
+    } else if (emotion === "sad") {
+        melody = ["A3", "D4", "F4", "A4"];
+        duration = ["2n", "2n", "2n", "2n"];
+    } else if (emotion === "angry") {
+        melody = ["G3", "D4", "G4", "D5"];
+        duration = ["8n", "8n", "8n", "8n"];
+    } else if (emotion === "disgusted") {
+        melody = ["C3", "Eb4", "G#4", "C5"];
+        duration = ["1n", "1n", "1n", "1n"];
+    } else {
+        melody = ["C4"];
+        duration = ["1n"];
+    }
+
+    const part = new Tone.Part((time, note) => {
+        synth.triggerAttackRelease(note, "8n", time);
+    }, melody.map((note, index) => [index * Tone.Time(duration[index]), note]));
+
+    part.start(0);
+    Tone.Transport.start();
+}
+Tone.Transport.bpm.value = 120;
+ 
 
 function randomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
