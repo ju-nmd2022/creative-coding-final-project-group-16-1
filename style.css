@@ -5,7 +5,9 @@ body {
     background-color: #f4f4f4;
 }
 
-
+#warningPopup {
+    display: none;
+}
 #container {
     display: flex;
     justify-content: space-between;

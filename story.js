@@ -38,11 +38,19 @@ function startVideo() {
         if (detections.length > 0) {
             const emotions = detections[0].expressions;
             updateEmotionBar(emotions); 
-            if (!storyLocked) {
-                generateRandomStory(emotions);  
+            
+            const faceCount = detections.length;
+            if (faceCount > 1) {
+              warningPopup.style.display = 'block';
+              confirm ("One face each time!")
+            } else {
+                warningPopup.style.display = 'none';
+                if (!storyLocked) {
+                  generateRandomStory(emotions);  
+            }
             }
         }
-    }, 100);
+    }, 400);
 });
 
 function updateEmotionBar(emotions) {
