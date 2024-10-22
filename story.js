@@ -4,10 +4,11 @@ let storyLocked = false;
 const video = document.getElementById('video');
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-  faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-  faceapi.nets.faceExpressionNet.loadFromUri('/models')
-]).then(startVideo);
+    faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights'),
+    faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights')
+  ]).then(startVideo);
+  
 
 function startVideo() {
   navigator.mediaDevices.getUserMedia({ video: {} })
