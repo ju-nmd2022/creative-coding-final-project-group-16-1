@@ -1,5 +1,6 @@
 let currentEmotion = null;  
 let storyLocked = false;   
+let latestEmotions = null;  // store the latest emotions
 
 const video = document.getElementById('video');
 
@@ -7,8 +8,7 @@ Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights'),
     faceapi.nets.faceLandmark68Net.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights'),
     faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights')
-  ]).then(startVideo);
-  
+]).then(startVideo);
 
 function startVideo() {
   navigator.mediaDevices.getUserMedia({ video: {} })
@@ -35,20 +35,16 @@ video.addEventListener('play', () => {
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
-    if (detections.length > 0) {
-      const emotions = detections[0].expressions;
-      updateEmotionBar(emotions);
+    const faceCount = detections.length;
+            if (faceCount > 1) {
+              warningPopup.style.display = 'block';
+              confirm ("One face each time!")
+            } else {
+                warningPopup.style.display = 'none';}
 
-      const faceCount = detections.length;
-      if (faceCount > 1) {
-        warningPopup.style.display = 'block';
-        confirm("One face each time!");
-      } else {
-        warningPopup.style.display = 'none';
-        if (!storyLocked) {
-          generateRandomStory(emotions);
-        }
-      }
+    if (detections.length > 0) {
+      latestEmotions = detections[0].expressions;  
+      updateEmotionBar(latestEmotions);   // update the emotion bar in real time
     }
   }, 400);
 });
@@ -73,29 +69,13 @@ function updateEmotionBarColor(value) {
 
   if (value <= 50) {
     red = 255;
-    green = Math.floor(255 * (value / 50));
+    green = Math.floor(255 * (value / 50));  
   } else {
-    red = Math.floor(255 * (1 - (value - 50) / 50));
+    red = Math.floor(255 * (1 - (value - 50) / 50));  
     green = 255;
   }
 
   emotionBar.style.backgroundColor = `rgb(${red}, ${green}, 0)`;
-}
-
-function generateRandomStory(emotions) {
-  let detectedEmotion = getDetectedEmotion(emotions);
-
-  if (detectedEmotion !== currentEmotion) {
-    currentEmotion = detectedEmotion;
-    storyLocked = true;
-
-    const storyText = document.getElementById('storyText');
-    const story = generateStoryBasedOnEmotion(currentEmotion);
-    storyText.innerText = story;
-
-    // Play sound for the current emotion
-    createSound(currentEmotion);
-  }
 }
 
 function getDetectedEmotion(emotions) {
@@ -112,7 +92,8 @@ function getDetectedEmotion(emotions) {
   }
 }
 
-function generateStoryBasedOnEmotion(emotion) {
+
+function generateStoryBasedOnEmotion(emotions) {
   let storyStart = "";
   let storyMiddle = "";
   let storyEnd = "";
@@ -205,52 +186,66 @@ function generateStoryBasedOnEmotion(emotion) {
     }
   };
 
-  storyStart = randomElement(stories[emotion].start);
-  storyMiddle = randomElement(stories[emotion].middle);
-  storyEnd = randomElement(stories[emotion].end);
+  storyStart = randomElement(stories[emotions].start);
+  storyMiddle = randomElement(stories[emotions].middle);
+  storyEnd = randomElement(stories[emotions].end);
 
   return `${storyStart} ${storyMiddle} ${storyEnd}`;
 }
 
+// create sound 
 function createSound(emotion) {
-  let melody = [];
-  let duration = [];
-
-  const synth = new Tone.Synth().toDestination();
-
-  if (emotion === "happy") {
-    melody = ["C4", "E4", "G4", "C5"];
-    duration = ["4n", "4n", "4n", "4n"];
-  } else if (emotion === "sad") {
-    melody = ["A3", "D4", "F4", "A4"];
-    duration = ["2n", "2n", "2n", "2n"];
-  } else if (emotion === "angry") {
-    melody = ["G3", "D4", "G4", "D5"];
-    duration = ["8n", "8n", "8n", "8n"];
-  } else if (emotion === "disgusted") {
-    melody = ["C3", "Eb4", "G#4", "C5"];
-    duration = ["1n", "1n", "1n", "1n"];
-  } else {
-    melody = ["C4", "D4", "E4"];
-    duration = ["1n"];
+    let melody = [];
+    let duration = [];
+  
+    const synth = new Tone.Synth().toDestination();
+    
+    if (emotion === "happy") {
+      melody = ["C4", "E4", "G4", "C5"];
+      duration = ["4n", "4n", "4n", "4n"];
+    } else if (emotion === "sad") {
+      melody = ["A3", "D4", "F4", "A4"];
+      duration = ["2n", "2n", "2n", "2n"];
+    } else if (emotion === "angry") {
+      melody = ["G3", "D4", "G4", "D5"];
+      duration = ["8n", "8n", "8n", "8n"];
+    } else if (emotion === "disgusted") {
+      melody = ["C3", "Eb4", "G#4", "C5"];
+      duration = ["1n", "1n", "1n", "1n"];
+    } else {
+      melody = ["C4", "D4", "E4"];
+      duration = ["1n", "1n", "1n"];
+    }
+  
+    // reset each time the button is clicked 
+    Tone.Transport.stop();
+    Tone.Transport.cancel(); 
+  
+    // play the sound
+    const part = new Tone.Part((time, note) => {
+      synth.triggerAttackRelease(note, "8n", time);
+    }, melody.map((note, index) => [index * Tone.Time(duration[index]), note]));
+  
+    part.start(0);
+    Tone.Transport.start();
   }
-
-  // Play the melody as a sequence
-  const part = new Tone.Part((time, note) => {
-    synth.triggerAttackRelease(note, "8n", time);
-  }, melody.map((note, index) => [index * Tone.Time(duration[index]), note]));
-
-  part.start(0);
-  Tone.Transport.start();
-}
-
-Tone.Transport.bpm.value = 120;
-
-function randomElement(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-document.getElementById('refresh-button').addEventListener('click', () => {
-  storyLocked = false;
-  currentEmotion = null;
-});
+  
+  Tone.Transport.bpm.value = 120;
+  
+  function randomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+  
+  // click button for making the story and sound 
+  document.getElementById('refresh-button').addEventListener('click', () => {
+    if (latestEmotions) {
+      const detectedEmotion = getDetectedEmotion(latestEmotions);
+  
+      const storyText = document.getElementById('storyText');
+      const story = generateStoryBasedOnEmotion(detectedEmotion);
+      storyText.innerText = story;
+  
+      createSound(detectedEmotion);
+      updateEmotionBar(latestEmotions);
+    }
+  });
