@@ -1,6 +1,6 @@
 let currentEmotion = null;  
 let storyLocked = false;   
-let latestEmotions = null;  // store the latest emotions
+let latestEmotions = null;  
 
 const video = document.getElementById('video');
 
@@ -36,11 +36,12 @@ video.addEventListener('play', () => {
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
     const faceCount = detections.length;
-            if (faceCount > 1) {
-              warningPopup.style.display = 'block';
-              confirm ("One face each time!")
-            } else {
-                warningPopup.style.display = 'none';}
+    if (faceCount > 1) {
+      warningPopup.style.display = 'block';
+      confirm("One face each time!")
+    } else {
+      warningPopup.style.display = 'none';
+    }
 
     if (detections.length > 0) {
       latestEmotions = detections[0].expressions;  
@@ -79,173 +80,153 @@ function updateEmotionBarColor(value) {
 }
 
 function getDetectedEmotion(emotions) {
-  if (emotions.happy > 0.5) {
-    return "happy";
-  } else if (emotions.sad > 0.5) {
-    return "sad";
-  } else if (emotions.angry > 0.8) {
-    return "angry";
-  } else if (emotions.disgusted > 0.9) {
-    return "disgusted";
-  } else {
-    return "neutral";
-  }
+  const sorted = Object.entries(emotions).sort((a, b) => b[1] - a[1]);
+  return sorted[0][1] > 0.5 ? sorted[0][0] : "neutral";
 }
 
+function generateStoryBasedOnEmotion(emotion) {
+  const characters = [
+    "a curious fox", "a lonely astronaut", "a tired robot", "a rebellious princess", 
+    "an ancient tree", "a traveler with no past", "a creature made of light"
+  ];
 
-function generateStoryBasedOnEmotion(emotions) {
-  let storyStart = "";
-  let storyMiddle = "";
-  let storyEnd = "";
+  const locations = [
+    "in a forgotten forest", "on a floating island", "beneath the ocean", 
+    "in the last city on Earth", "among the stars", "inside a dream", 
+    "in a world made of mirrors"
+  ];
 
-  const stories = {
-    happy: {
-      start: [
-        "In a vibrant village filled with laughter,",
-        "On a sunny day where everything seemed perfect,",
-        "Amidst blooming flowers and cheerful conversations,"
-      ],
-      middle: [
-        "the villagers danced with joy, celebrating the beauty of life.",
-        "everyone gathered to share stories and make new memories.",
-        "children ran across the fields, their laughter filling the air."
-      ],
-      end: [
-        "As the sun set, the joy remained, warming everyone's hearts.",
-        "The day ended, but the happiness lingered, lighting the path forward.",
-        "The night was calm, and the village slept peacefully, content with the day's memories."
-      ]
-    },
-    sad: {
-      start: [
-        "In a quiet town where the rain never seemed to stop,",
-        "On a cloudy day where everything felt heavy,",
-        "In a place where the sun had long since disappeared,"
-      ],
-      middle: [
-        "the people moved slowly, burdened by memories of better times.",
-        "tears fell like raindrops, as hearts grew heavier with sorrow.",
-        "the town was silent, except for the quiet sobs of those remembering what was lost."
-      ],
-      end: [
-        "But even in the darkest times, hope remained, like a small flicker in the distance.",
-        "Yet through the tears, a glimmer of light appeared, promising a brighter tomorrow.",
-        "Even in the sadness, there was a quiet understanding that the rain would eventually pass."
-      ]
-    },
-    angry: {
-      start: [
-        "In a land torn apart by conflict and anger,",
-        "Under a sky filled with thunder,",
-        "In the midst of a storm that reflected the turmoil within,"
-      ],
-      middle: [
-        "tempers flared, and the air was thick with tension.",
-        "people shouted and argued, their hearts consumed by fury.",
-        "the storm grew stronger, mirroring the anger that burned within the people."
-      ],
-      end: [
-        "But as the storm passed, a calm began to settle, and they realized peace was possible.",
-        "The anger subsided, leaving behind a chance to rebuild and make amends.",
-        "In the aftermath of the storm, the people found peace, knowing anger was not the answer."
-      ]
-    },
-    disgusted: {
-      start: [
-        "In a world decaying from within,",
-        "Amidst the foul stench of betrayal and greed,",
-        "In a land where corruption had taken root deep,"
-      ],
-      middle: [
-        "the people turned away, disgusted by what they had allowed to fester.",
-        "there was no joy, only disgust at the sight of the ruin before them.",
-        "as the ground decayed, so did the values they once held dear."
-      ],
-      end: [
-        "But from the decay, new life began to sprout, offering hope for the future.",
-        "Through confronting the ugliness, they realized the only way forward was through renewal.",
-        "Even in the darkest decay, there is always a chance for rebirth and renewal."
-      ]
-    },
-    neutral: {
-      start: [
-        "On a calm day with nothing remarkable in sight,",
-        "In a quiet town where nothing ever seemed to change,",
-        "On a peaceful evening where everything was in perfect balance,"
-      ],
-      middle: [
-        "the people went about their lives, content but longing for something more.",
-        "life continued as it always had, with no excitement or sorrow.",
-        "there was peace, but also a yearning for something to break the monotony."
-      ],
-      end: [
-        "In the stillness, they found meaning in the small moments.",
-        "Though nothing extraordinary happened, they realized peace is its own kind of joy.",
-        "They understood that even in stillness, there was room for growth and reflection."
-      ]
-    }
+  const quests = [
+    "searching for something they could not name",
+    "trying to remember why they were born",
+    "running from a voice only they could hear",
+    "looking for a door that appears only at night",
+    "trying to undo a promise made long ago"
+  ];
+
+  const twists = {
+    happy: [
+      "Suddenly, they found a glowing key buried under a sunflower.",
+      "Out of nowhere, laughter echoed through the sky like music.",
+      "Then, a cloud opened up and rained candy on the land below."
+    ],
+    sad: [
+      "Suddenly, all color faded from the world.",
+      "A ghostly figure whispered their name and vanished.",
+      "They realized the stars had forgotten how to shine."
+    ],
+    angry: [
+      "Then the ground cracked, and fire leapt out to answer their rage.",
+      "Their scream summoned a dragon that had been asleep for 1000 years.",
+      "They punched the sky so hard, the moon fell into the sea."
+    ],
+    disgusted: [
+      "Out of the rot, something began to crawl — but it was beautiful.",
+      "They touched the ooze, and it whispered secrets to them.",
+      "The ugliness around them twisted into a kind of truth."
+    ],
+    neutral: [
+      "Nothing happened — and yet, everything felt different.",
+      "Time blinked, then reversed for just a moment.",
+      "A bird landed beside them and said, 'The world is watching.'"
+    ]
   };
 
-  storyStart = randomElement(stories[emotions].start);
-  storyMiddle = randomElement(stories[emotions].middle);
-  storyEnd = randomElement(stories[emotions].end);
+  const endings = [
+    "They kept walking, unsure if the journey had just begun or just ended.",
+    "And so, they became a story that others would someday tell.",
+    "No one knows what happened next — maybe even they forgot.",
+    "But one thing was clear: nothing would ever be the same again.",
+    "And in that moment, they understood everything without needing words."
+  ];
 
-  return `${storyStart} ${storyMiddle} ${storyEnd}`;
+ 
+  const character = randomElement(characters);
+  const location = randomElement(locations);
+  const quest = randomElement(quests);
+  const twist = randomElement(twists[emotion] || twists["neutral"]);
+  const ending = randomElement(endings);
+
+  return `There was once ${character} who lived ${location}. They were ${quest}. ${twist} ${ending}`;
 }
 
-// create sound 
 function createSound(emotion) {
-    let melody = [];
-    let duration = [];
-  
-    const synth = new Tone.Synth().toDestination();
-    
-    if (emotion === "happy") {
-      melody = ["C4", "E4", "G4", "C5"];
-      duration = ["4n", "4n", "4n", "4n"];
-    } else if (emotion === "sad") {
-      melody = ["A3", "D4", "F4", "A4"];
-      duration = ["2n", "2n", "2n", "2n"];
-    } else if (emotion === "angry") {
-      melody = ["G3", "D4", "G4", "D5"];
-      duration = ["8n", "8n", "8n", "8n"];
-    } else if (emotion === "disgusted") {
-      melody = ["C3", "Eb4", "G#4", "C5"];
-      duration = ["1n", "1n", "1n", "1n"];
-    } else {
-      melody = ["C4", "D4", "E4"];
-      duration = ["1n", "1n", "1n"];
-    }
-  
-    // reset each time the button is clicked 
-    Tone.Transport.stop();
-    Tone.Transport.cancel(); 
-  
-    // play the sound
-    const part = new Tone.Part((time, note) => {
-      synth.triggerAttackRelease(note, "8n", time);
-    }, melody.map((note, index) => [index * Tone.Time(duration[index]), note]));
-  
-    part.start(0);
-    Tone.Transport.start();
+  Tone.Transport.stop();
+  Tone.Transport.cancel();
+
+  let synth, effectChain, scale = [], bpm, baseOctave;
+
+ 
+  function generateRandomMelody(scale, length) {
+    return Array.from({ length }, () => {
+      const note = scale[Math.floor(Math.random() * scale.length)];
+      const octave = baseOctave + Math.floor(Math.random() * 2); 
+      return `${note}${octave}`;
+    });
   }
-  
-  Tone.Transport.bpm.value = 120;
-  
-  function randomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
+
+
+  const durations = ["4n", "8n", "16n", "2n"];
+
+
+  if (emotion === "happy") {
+    synth = new Tone.Synth().connect(new Tone.Reverb(Math.random() * 3).toDestination());
+    scale = ["C", "D", "E", "G", "A"];
+    baseOctave = 4;
+    bpm = 120 + Math.floor(Math.random() * 40); 
+
+  } else if (emotion === "sad") {
+    synth = new Tone.FMSynth().connect(new Tone.FeedbackDelay("8n", Math.random()).toDestination());
+    scale = ["A", "B", "C", "D", "E"];
+    baseOctave = 3;
+    bpm = 60 + Math.floor(Math.random() * 20);  
+
+  } else if (emotion === "angry") {
+    synth = new Tone.MembraneSynth().connect(new Tone.Distortion(Math.random()).toDestination());
+    scale = ["C", "D", "Eb", "F", "G"];
+    baseOctave = 2;
+    bpm = 160 + Math.floor(Math.random() * 40);  
+
+  } else if (emotion === "disgusted") {
+    synth = new Tone.AMSynth().connect(new Tone.FeedbackDelay("16n", Math.random()).toDestination());
+    scale = ["C", "Db", "Gb", "A"];
+    baseOctave = 2;
+    bpm = 80 + Math.floor(Math.random() * 20);
+
+  } else {
+    synth = new Tone.DuoSynth().connect(new Tone.Reverb(Math.random() * 5).toDestination());
+    scale = ["C", "D", "E", "F", "G", "A", "B"];
+    baseOctave = 3;
+    bpm = 100 + Math.floor(Math.random() * 30);
   }
-  
-  // click button for making the story and sound 
-  document.getElementById('refresh-button').addEventListener('click', () => {
-    if (latestEmotions) {
-      const detectedEmotion = getDetectedEmotion(latestEmotions);
-  
-      const storyText = document.getElementById('storyText');
-      const story = generateStoryBasedOnEmotion(detectedEmotion);
-      storyText.innerText = story;
-  
-      createSound(detectedEmotion);
-      updateEmotionBar(latestEmotions);
-    }
-  });
+
+  const melody = generateRandomMelody(scale, 6);
+  const durationSeq = melody.map(() => durations[Math.floor(Math.random() * durations.length)]);
+
+  Tone.Transport.bpm.value = bpm;
+
+  const part = new Tone.Part((time, note) => {
+    synth.triggerAttackRelease(note, "8n", time);
+  }, melody.map((note, i) => [i * Tone.Time(durationSeq[i]), note]));
+
+  part.start(0);
+  Tone.Transport.start();
+}
+
+
+function randomElement(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+document.getElementById('refresh-button').addEventListener('click', () => {
+  if (latestEmotions) {
+    const detectedEmotion = getDetectedEmotion(latestEmotions);
+
+    const storyText = document.getElementById('storyText');
+    const story = generateStoryBasedOnEmotion(detectedEmotion);
+    storyText.innerText = story;
+
+    createSound(detectedEmotion);
+    updateEmotionBar(latestEmotions);
+  }
+});
